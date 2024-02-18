@@ -1,9 +1,9 @@
 {
   "name": "miro-export",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "jolle <npm-contact@jolle.io>",
   "license": "MIT",
-  "description": "Export Miro boards or frames as SVGs",
+  "description": "Export Miro boards and/or frames as SVG or JSON",
   "keywords": [
     "miro",
     "svg",

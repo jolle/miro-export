@@ -2,13 +2,41 @@ import { writeFile } from "fs/promises";
 import puppeteer from "puppeteer";
 import { program } from "@commander-js/extra-typings";
 
+type BoardObjectType = "frame" | "group" | "sticky_note" | "text";
+interface BoardObjectBase {
+  title: string;
+  id: string;
+  type: BoardObjectType;
+}
+interface FrameBoardObject extends BoardObjectBase {
+  type: "frame";
+  title: string;
+  childrenIds: string[];
+}
+interface GroupBoardObject extends BoardObjectBase {
+  type: "group";
+  itemsIds: string[];
+}
+interface StickyNoteBoardObject extends BoardObjectBase {
+  type: "sticky_note";
+}
+interface TextBoardObject extends BoardObjectBase {
+  type: "text";
+}
+type BoardObject =
+  | FrameBoardObject
+  | GroupBoardObject
+  | StickyNoteBoardObject
+  | TextBoardObject;
+
 declare global {
   interface Window {
     miro: {
       board: {
         get(opts: {
-          type: "frame"[];
-        }): Promise<{ title: string; id: string }[]>;
+          type?: BoardObjectType[];
+          id?: string[];
+        }): Promise<BoardObject[]>;
         select(opts: { id: string }): Promise<void>;
         deselect(): Promise<void>;
       };
@@ -25,7 +53,7 @@ declare global {
   }
 }
 
-const { token, boardId, frameNames, outputFile } = program
+const { token, boardId, frameNames, outputFile, exportFormat } = program
   .requiredOption("-t, --token <token>", "Miro token")
   .requiredOption("-b, --board-id <boardId>", "The board ID")
   .option(
@@ -36,6 +64,7 @@ const { token, boardId, frameNames, outputFile } = program
     "-o, --output-file <filename>",
     "A file to output the SVG to (stdout if not supplied)"
   )
+  .option("-e, --export-format <format>", "'svg' or 'json' (default: 'svg')")
   .parse()
   .opts();
 
@@ -99,6 +128,45 @@ const { token, boardId, frameNames, outputFile } = program
       return await window.cmd.board.api.export.makeVector();
     }, frameNames);
 
+  const getJsonForFrames = (frameNames: string[] | undefined) =>
+    page.evaluate(async (frameNames) => {
+      if (frameNames) {
+        const frames = await window.miro.board.get({ type: ["frame"] });
+
+        const selectedFrames = frames.filter((frame) =>
+          frameNames.includes(frame.title)
+        );
+
+        if (selectedFrames.length !== frameNames.length) {
+          throw Error(
+            `${
+              frameNames.length - selectedFrames.length
+            } frame(s) could not be found on the board.`
+          );
+        }
+
+        const children = await window.miro.board.get({
+          id: selectedFrames.flatMap(
+            (frame) => (frame as FrameBoardObject).childrenIds
+          )
+        });
+
+        const groupChildren = await window.miro.board.get({
+          id: children
+            .filter(
+              (child): child is GroupBoardObject => child.type === "group"
+            )
+            .flatMap((child) => child.itemsIds)
+        });
+
+        return JSON.stringify([...frames, ...children, ...groupChildren]);
+      }
+
+      return JSON.stringify(await window.miro.board.get({}));
+    }, frameNames);
+
+  const getFn = exportFormat === "json" ? getJsonForFrames : getSvgForFrames;
+
   if (outputFile?.includes("{frameName}")) {
     if (!frameNames) {
       throw Error(
@@ -107,11 +175,11 @@ const { token, boardId, frameNames, outputFile } = program
     }
 
     for (const frameName of frameNames) {
-      const svg = await getSvgForFrames([frameName]);
+      const svg = await getFn([frameName]);
       await writeFile(outputFile.replace("{frameName}", frameName), svg);
     }
   } else {
-    const svg = await getSvgForFrames(frameNames);
+    const svg = await getFn(frameNames);
     if (outputFile) {
       await writeFile(outputFile, svg);
     } else {
