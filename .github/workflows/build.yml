@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+      - name: Lint
+        run: pnpm run lint
+      - name: Build
+        run: pnpm run build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build/
