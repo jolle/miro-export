@@ -39,7 +39,9 @@ const { token, boardId, frameNames, outputFile, exportFormat } = program
   }
 
   async function getSvg(frames?: FrameBoardObject[]) {
-    return await miroBoard.getSvg(frames?.map(({ id }) => id));
+    return await miroBoard.getSvg(
+      frames?.map(({ id }) => id).filter((id): id is string => !!id)
+    );
   }
 
   async function getJson(frames?: FrameBoardObject[]) {
