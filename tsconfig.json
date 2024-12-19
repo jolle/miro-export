@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["DOM"],
-    "module": "commonjs",
-    "declaration": false,
+    "target": "ES2023",
+    "lib": ["DOM", "ESNext"],
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "declaration": true,
     "outDir": "./build",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src", "src/miro-runtime.d.ts"]
 }
