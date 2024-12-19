@@ -1,6 +1,6 @@
 {
   "name": "miro-export",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "jolle <npm-contact@jolle.io>",
   "license": "MIT",
   "type": "module",
@@ -23,25 +23,28 @@
     "miro-export": "./build/cli.js"
   },
   "devDependencies": {
-    "@types/node": "^20.11.19",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.17.0",
+    "@stylistic/eslint-plugin-ts": "^2.12.1",
+    "@types/node": "^22.10.2",
     "ajv": "^8.17.1",
-    "eslint": "^8.56.0",
+    "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
-    "eslint-plugin-promise": "^6.1.1",
-    "prettier": "^3.2.5",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "prettier": "^3.4.2",
     "ts-json-schema-generator": "^2.3.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^7.0.1"
+    "typescript-eslint": "^8.18.1"
   },
   "dependencies": {
-    "@commander-js/extra-typings": "^12.0.0",
-    "commander": "^12.0.0",
+    "@commander-js/extra-typings": "^12.1.0",
+    "commander": "^12.1.0",
     "puppeteer": "^23.11.1"
   },
   "scripts": {
-    "lint": "eslint *.ts && prettier -c *.ts",
+    "lint": "eslint src/*.ts && prettier -c src/*.ts",
     "build": "tsc && echo \"#!/usr/bin/env node\n$(cat ./build/index.js)\" > ./build/index.js",
     "test": "npm run test:board-object-types && npm run test:api",
     "test:board-object-types": "tsx tests/board-object-types.ts",
