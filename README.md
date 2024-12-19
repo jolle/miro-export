@@ -1,12 +1,18 @@
 # Miro board exporter
 
-Exports Miro frames as full-detail SVGs or JSON using a headless Puppeteer browser. Requires a personal Miro token.
+Exports Miro frames as full-detail SVGs or JSON using a headless Puppeteer browser.
 
-## Getting the Miro token
+- [Authentication](#authentication)
+- [CLI](#cli)
+- [Programmatic usage](#programmatic-usage)
 
-Log in to Miro using your regular web browser, and then copy the value of the "token" cookie from developer tools. This is the token that this tool requires.
+## Authentication
 
-## Usage
+If accessing a private board, a personal token is required. To get a token, log in to Miro using a regular web browser, and then copy the value of the "token" cookie from developer tools. This is the token that should be used. If the board can be accessed without an account using a public link, the token is optional.
+
+## CLI
+
+### Usage
 
 ```
 Options:
@@ -18,7 +24,7 @@ Options:
   -h, --help                         display help for command
 ```
 
-## Examples
+### Examples
 
 ```sh
 # export "Frame 2" to the file "My Frame 2.svg"
@@ -34,13 +40,13 @@ miro-export -t XYZ -b uMoVLkx8gIc= -f "Frame 2" "Frame 3" -o "{frameName}.svg"
 miro-export -t XYZ -b uMoVLkx8gIc= -f "Frame 2" -e json
 ```
 
-## Capturing multiple frames at once
+### Capturing multiple frames at once
 
-It is possible to supply multiple frames to the `-f` switch, e.g., `-f "Frame 2" "Frame 3"`. However, for SVG export, this will capture all content that is within the outer bounding box when all frames have been selected, so content between the frames will be captured as well. If you want separate SVGs for each frame, use the output file switch with `{frameName}` in the file name, e.g., `-o "Export - {frameName}.svg"`. It is not possible to export separate SVGs without the output file specified (i.e., to stdout).
+It is possible to give multiple frames to the `-f` switch, e.g., `-f "Frame 2" "Frame 3"`. However, for SVG export, this will capture all content that is within the outer bounding box when all frames have been selected, so content between the frames will be captured as well. If you want separate SVGs for each frame (and thus avoiding capturing content in between), use the output file switch with `{frameName}` in the file name, e.g., `-o "Export - {frameName}.svg"`. It is not possible to export separate SVGs without the output file specified (i.e., to stdout).
 
-## JSON export
+### JSON export
 
-The JSON export format is a Miro-internal representation of all the board objects. It is not a documented format, but it is quite easy to understand. The exported format is always an array of objects that have the field `type` as a discriminator. Depending on the type, fields change, but there is always at least an `id` field. For example, a `sticky_note` object could look like this:
+The JSON export format is a Miro-internal representation of all the board objects. It is not a documented format, but it is quite easy to understand. The exported format is always an array of objects that have the field `type` as a discriminator. Depending on the type, fields change. Some of the types have been documented as TypeScript interfaces at [miro-types.ts](src/miro-types.ts). For example, a `sticky_note` object could look like this:
 
 ```json
 {
@@ -68,3 +74,35 @@ The JSON export format is a Miro-internal representation of all the board object
   "height": 125.12
 }
 ```
+
+## Programmatic usage
+
+```ts
+import { MiroBoard } from "miro-export";
+
+await using miroBoard = new MiroBoard({
+  boardId: "uMoVLkx8gIc=", // required
+  token: "..." // optional
+});
+
+// get all board objects of type frame and with title "Frame 1"
+const framesWithTitleFrame1 = await miroBoard.getBoardObjects(
+  { type: "frame" }, // required (but empty object is OK too), limited field support
+  { title: "Frame 1" } // optional additional filters
+);
+
+// get SVG of the first frame found above
+const svgOfFrame1 = await miroBoard.getSvg([framesWithTitleFrame1[0].id]);
+
+// if you can't use "await using" for disposal, you can also dispose manually:
+// await miroBoard.dispose()
+// this can also be used to close the browser at the middle of the current scope
+```
+
+> [!WARNING]  
+> Remember to dispose the instance to make sure the browser is closed and the process
+> can exit. `await using` (as shown above) does this automatically, but is not supported
+> in all environments and may not be the optimal choise in every case. Alternatively,
+> `miroBoard.dispose()` may be called at any time to dispose of the instance manually.
+
+Types for many of the common board object types has been provided in [miro-types.ts](src/miro-types.ts).
