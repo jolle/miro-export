@@ -12,6 +12,17 @@ If accessing a private board, a personal token is required. To get a token, log 
 
 ## CLI
 
+You can use this tool as a command-line tool.
+
+### Prerequisites
+
+- [Node.js >=22](https://nodejs.org/en/download)
+- npm (built-in to Node.js), yarn, or pnpm
+
+### Installation
+
+The CLI can be ran using [npx](https://docs.npmjs.com/cli/v8/commands/npx) with `npx miro-export [options]` (see options below). Alternatively, it's possible to install the package to the global scope with, for example, `npm i -g miro-export`.
+
 ### Usage
 
 ```
@@ -29,6 +40,9 @@ Options:
 ```sh
 # export "Frame 2" to the file "My Frame 2.svg"
 miro-export -t XYZ -b uMoVLkx8gIc= -f "Frame 2" -o "My Frame 2.svg"
+
+# using npx
+npx miro-export -t XYZ -b uMoVLkx8gIc= -f "Frame 2" -o "My Frame 2.svg"
 
 # export entire board to stdout
 miro-export -t XYZ -b uMoVLkx8gIc=
