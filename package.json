@@ -45,7 +45,7 @@
   },
   "scripts": {
     "lint": "eslint src/*.ts && prettier -c src/*.ts",
-    "build": "tsc && echo \"#!/usr/bin/env node\n$(cat ./build/index.js)\" > ./build/index.js",
+    "build": "tsc && echo \"#!/usr/bin/env node\n$(cat ./build/cli.js)\" > ./build/cli.js",
     "test": "npm run test:board-object-types && npm run test:api",
     "test:board-object-types": "tsx tests/board-object-types.ts",
     "test:api": "tsx tests/api.test.ts"
