@@ -41,7 +41,7 @@
   "dependencies": {
     "@commander-js/extra-typings": "^12.1.0",
     "commander": "^12.1.0",
-    "puppeteer": "^23.11.1"
+    "puppeteer": "^24.31.0"
   },
   "scripts": {
     "lint": "eslint src/*.ts && prettier -c src/*.ts",
