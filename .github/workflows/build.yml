@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: pnpm run build
       - name: Upload Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: build
           path: build/
