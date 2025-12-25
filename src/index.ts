@@ -83,6 +83,18 @@ export class MiroBoard {
               );
             }, timeoutDuration);
 
+            const authModalChecker = setInterval(() => {
+              if (
+                document.querySelector('[data-testid="signup-popup-container"]')
+              ) {
+                reject(
+                  new Error(
+                    `Miro board requires authentication. Check board access settings to allow anonymous access or supply a token.`
+                  )
+                );
+              }
+            }, 250);
+
             let miroValue: (typeof window)["miro"];
             Object.defineProperty(window, "miro", {
               get() {
@@ -90,6 +102,7 @@ export class MiroBoard {
               },
               set(value) {
                 clearTimeout(timeout);
+                clearInterval(authModalChecker);
                 miroValue = value;
                 resolve();
               }

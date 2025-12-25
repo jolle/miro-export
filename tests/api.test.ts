@@ -3,9 +3,15 @@ import assert from "node:assert";
 import { MiroBoard } from "../src";
 
 const boardId = process.env.TEST_BOARD_ID;
+const inaccessibleBoardId = process.env.PRIVATE_TEST_BOARD_ID;
 
 if (!boardId) {
   console.error("TEST_BOARD_ID environment variable is required.");
+  process.exit(1);
+}
+
+if (!inaccessibleBoardId) {
+  console.error("PRIVATE_TEST_BOARD_ID environment variable is required.");
   process.exit(1);
 }
 
@@ -65,4 +71,18 @@ describe("Miro integration", async () => {
     assert.ok(svg.includes("STAR"));
     assert.ok(svg.length > 10_000);
   });
+});
+
+await it("should throw error for a non-public board", async () => {
+  try {
+    const miroBoard = new MiroBoard({ boardId: inaccessibleBoardId });
+    await miroBoard.getBoardObjects({});
+    assert.fail();
+  } catch (err) {
+    assert.ok(err instanceof Error);
+    assert.equal(
+      err.message,
+      "Miro board requires authentication. Check board access settings to allow anonymous access or supply a token."
+    );
+  }
 });
