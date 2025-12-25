@@ -1,4 +1,4 @@
-import puppeteer, { Browser, Page } from "puppeteer";
+import puppeteer, { Browser, Page, type LaunchOptions } from "puppeteer";
 import type { BoardObject } from "./miro-types.ts";
 import type { GetBoardsFilter } from "./miro-runtime.ts";
 
@@ -16,7 +16,7 @@ interface InitialMiroBoardOptions {
   /**
    * Optional custom Puppeteer launch options.
    */
-  puppeteerOptions?: puppeteer.LaunchOptions;
+  puppeteerOptions?: LaunchOptions;
   /**
    * Timeout until it is determined that the Miro board could
    * not be loaded for some reason, in milliseconds. Default
