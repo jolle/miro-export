@@ -26,72 +26,84 @@ const { token, boardId, frameNames, outputFile, exportFormat, loadTimeout } =
     .opts();
 
 (async () => {
-  await using miroBoard = new MiroBoard({
-    token,
-    boardId,
-    boardLoadTimeoutMs: loadTimeout
-  });
+  try {
+    await using miroBoard = new MiroBoard({
+      token,
+      boardId,
+      boardLoadTimeoutMs: loadTimeout
+    });
 
-  async function getFrames(frameNames: string[]) {
-    const frames = await miroBoard.getBoardObjects(
-      { type: "frame" as const },
-      { title: frameNames }
-    );
+    async function getFrames(frameNames: string[]) {
+      const frames = await miroBoard.getBoardObjects(
+        { type: "frame" as const },
+        { title: frameNames }
+      );
 
-    if (frames && frames.length !== frameNames.length) {
-      throw Error(
-        `${
-          frameNames.length - frames.length
-        } frame(s) could not be found on the board.`
+      if (frames && frames.length !== frameNames.length) {
+        throw Error(
+          `${
+            frameNames.length - frames.length
+          } frame(s) could not be found on the board.`
+        );
+      }
+
+      return frames;
+    }
+
+    async function getSvg(frames?: FrameBoardObject[]) {
+      return await miroBoard.getSvg(
+        frames?.map(({ id }) => id).filter((id): id is string => !!id)
       );
     }
 
-    return frames;
-  }
+    async function getJson(frames?: FrameBoardObject[]) {
+      if (frames) {
+        const frameChildren = await miroBoard.getBoardObjects({
+          id: frames.flatMap((frame) => frame.childrenIds)
+        });
 
-  async function getSvg(frames?: FrameBoardObject[]) {
-    return await miroBoard.getSvg(
-      frames?.map(({ id }) => id).filter((id): id is string => !!id)
-    );
-  }
+        const groupChildren = await miroBoard.getBoardObjects({
+          id: frameChildren
+            .filter((child) => child.type === "group")
+            .flatMap((child) => child.itemsIds)
+        });
 
-  async function getJson(frames?: FrameBoardObject[]) {
-    if (frames) {
-      const frameChildren = await miroBoard.getBoardObjects({
-        id: frames.flatMap((frame) => frame.childrenIds)
-      });
+        return JSON.stringify([...frames, ...frameChildren, ...groupChildren]);
+      }
 
-      const groupChildren = await miroBoard.getBoardObjects({
-        id: frameChildren
-          .filter((child) => child.type === "group")
-          .flatMap((child) => child.itemsIds)
-      });
-
-      return JSON.stringify([...frames, ...frameChildren, ...groupChildren]);
+      return JSON.stringify(await miroBoard.getBoardObjects({}));
     }
 
-    return JSON.stringify(await miroBoard.getBoardObjects({}));
-  }
+    const getFn = exportFormat === "json" ? getJson : getSvg;
 
-  const getFn = exportFormat === "json" ? getJson : getSvg;
+    if (outputFile?.includes("{frameName}")) {
+      if (!frameNames) {
+        throw Error(
+          "Expected frame names to be given when the output file name format expects a frame name."
+        );
+      }
 
-  if (outputFile?.includes("{frameName}")) {
-    if (!frameNames) {
-      throw Error(
-        "Expected frame names to be given when the output file name format expects a frame name."
-      );
-    }
-
-    for (const frameName of frameNames) {
-      const output = await getFn(await getFrames([frameName]));
-      await writeFile(outputFile.replace("{frameName}", frameName), output);
-    }
-  } else {
-    const svg = await getFn(frameNames && (await getFrames(frameNames)));
-    if (outputFile) {
-      await writeFile(outputFile, svg);
+      for (const frameName of frameNames) {
+        const output = await getFn(await getFrames([frameName]));
+        await writeFile(outputFile.replace("{frameName}", frameName), output);
+      }
     } else {
-      process.stdout.write(svg);
+      const svg = await getFn(frameNames && (await getFrames(frameNames)));
+      if (outputFile) {
+        await writeFile(outputFile, svg);
+      } else {
+        process.stdout.write(svg);
+      }
     }
+  } catch (err) {
+    const RED = "\x1b[31m";
+    const RESET = "\x1b[0m";
+    const GRAY = "\x1b[38;5;248m";
+    console.error(
+      `❌ ${RED}Error:${RESET} ${err instanceof Error ? err.message : err}`
+    );
+    console.error(GRAY);
+    console.error(err);
+    console.error(RESET);
   }
 })();

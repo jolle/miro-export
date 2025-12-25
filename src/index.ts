@@ -36,6 +36,7 @@ type FilteredResultsByType<
 
 export class MiroBoard {
   private context = Promise.withResolvers<{ browser: Browser; page: Page }>();
+  private isDisposed = false;
 
   constructor(options: InitialMiroBoardOptions) {
     this.initialize(options);
@@ -113,6 +114,7 @@ export class MiroBoard {
     } catch (err) {
       await browser.close();
       this.context.reject(err);
+      this.isDisposed = true;
       return;
     }
 
@@ -120,6 +122,10 @@ export class MiroBoard {
   }
 
   async dispose() {
+    if (this.isDisposed) {
+      return;
+    }
+    this.isDisposed = true;
     await (await this.browser).close();
   }
 
