@@ -3,23 +3,34 @@ import { program } from "@commander-js/extra-typings";
 import { MiroBoard } from "./index.js";
 import type { FrameBoardObject } from "./miro-types.ts";
 
-const { token, boardId, frameNames, outputFile, exportFormat } = program
-  .option("-t, --token <token>", "Miro token")
-  .requiredOption("-b, --board-id <boardId>", "The board ID")
-  .option(
-    "-f, --frame-names <frameNames...>",
-    "The frame name(s), leave empty to export entire board"
-  )
-  .option(
-    "-o, --output-file <filename>",
-    "A file to output the SVG to (stdout if not supplied)"
-  )
-  .option("-e, --export-format <format>", "'svg' or 'json' (default: 'svg')")
-  .parse()
-  .opts();
+const { token, boardId, frameNames, outputFile, exportFormat, loadTimeout } =
+  program
+    .option("-t, --token <token>", "Miro token")
+    .requiredOption("-b, --board-id <boardId>", "The board ID")
+    .option(
+      "-f, --frame-names <frameNames...>",
+      "The frame name(s), leave empty to export entire board"
+    )
+    .option(
+      "-o, --output-file <filename>",
+      "A file to output the SVG to (stdout if not specified)"
+    )
+    .option("-e, --export-format <format>", "'svg' or 'json'", "svg")
+    .option(
+      "-l, --load-timeout <milliseconds>",
+      "Timeout for loading the board in milliseconds",
+      (arg) => parseInt(arg, 10),
+      15000
+    )
+    .parse()
+    .opts();
 
 (async () => {
-  await using miroBoard = new MiroBoard({ token, boardId });
+  await using miroBoard = new MiroBoard({
+    token,
+    boardId,
+    boardLoadTimeoutMs: loadTimeout
+  });
 
   async function getFrames(frameNames: string[]) {
     const frames = await miroBoard.getBoardObjects(

@@ -30,8 +30,9 @@ Options:
   -t, --token <token>                Miro token
   -b, --board-id <boardId>           The board ID
   -f, --frame-names <frameNames...>  The frame name(s), leave empty to export entire board
-  -o, --output-file <filename>       A file to output the SVG to (stdout if not supplied)
-  -e, --export-format <format>       'svg' or 'json' (default: 'svg')
+  -o, --output-file <filename>       A file to output the SVG to (stdout if not specified)
+  -e, --export-format <format>       'svg' or 'json' (default: "svg")
+  -l, --load-timeout <milliseconds>  Timeout for loading the board in milliseconds (default: 15000)
   -h, --help                         display help for command
 ```
 

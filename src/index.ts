@@ -3,10 +3,29 @@ import type { BoardObject } from "./miro-types.ts";
 import type { GetBoardsFilter } from "./miro-runtime.ts";
 
 interface InitialMiroBoardOptions {
+  /**
+   * The Miro authentication token with access to load the board.
+   * Optional if anonymous users may access the board without
+   * logging in.
+   */
   token?: string;
+  /**
+   * The Miro board ID.
+   */
   boardId: string;
+  /**
+   * Optional custom Puppeteer launch options.
+   */
   puppeteerOptions?: puppeteer.LaunchOptions;
+  /**
+   * Timeout until it is determined that the Miro board could
+   * not be loaded for some reason, in milliseconds. Default
+   * is 15 seconds (15,000 milliseconds).
+   */
+  boardLoadTimeoutMs?: number;
 }
+
+const DEFAULT_BOARD_LOAD_TIMEOUT_MS = 15_000;
 
 type AdditionalFilter<T> = Partial<T> | Partial<{ [K in keyof T]: T[K][] }>;
 
@@ -48,25 +67,41 @@ export class MiroBoard {
       waitUntil: "domcontentloaded"
     });
 
-    await page.evaluate(
-      () =>
-        new Promise<void>((resolve) => {
-          if (window.miro) {
-            resolve();
-          }
-
-          let miroValue: (typeof window)["miro"];
-          Object.defineProperty(window, "miro", {
-            get() {
-              return miroValue;
-            },
-            set(value) {
-              miroValue = value;
+    try {
+      await page.evaluate(
+        (timeoutDuration) =>
+          new Promise<void>((resolve, reject) => {
+            if (window.miro) {
               resolve();
             }
-          });
-        })
-    );
+
+            const timeout = setTimeout(() => {
+              reject(
+                new Error(
+                  `Miro board could not be loaded: application instance not available after ${timeoutDuration} ms. Check your network connection, access token and board access.`
+                )
+              );
+            }, timeoutDuration);
+
+            let miroValue: (typeof window)["miro"];
+            Object.defineProperty(window, "miro", {
+              get() {
+                return miroValue;
+              },
+              set(value) {
+                clearTimeout(timeout);
+                miroValue = value;
+                resolve();
+              }
+            });
+          }),
+        options.boardLoadTimeoutMs ?? DEFAULT_BOARD_LOAD_TIMEOUT_MS
+      );
+    } catch (err) {
+      await browser.close();
+      this.context.reject(err);
+      return;
+    }
 
     this.context.resolve({ browser, page });
   }
