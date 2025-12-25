@@ -69,15 +69,14 @@ interface BoardObjectWithDimensions {
 }
 
 export interface PreviewBoardObject
-  extends BoardItemBase,
-    BoardObjectBase,
-    BoardObjectWithDimensions {
+  extends BoardItemBase, BoardObjectBase, BoardObjectWithDimensions {
   type: "preview";
   url: string;
 }
 
 export interface FrameBoardObject
-  extends Omit<BoardItemBase, "connectorIds">,
+  extends
+    Omit<BoardItemBase, "connectorIds">,
     BoardObjectBase,
     BoardObjectWithDimensions,
     BoardObjectWithCoordinates {
@@ -96,7 +95,8 @@ export interface GroupBoardItem extends BoardItemBase {
 }
 
 export interface StickyNoteBoardObject
-  extends BoardItemBase,
+  extends
+    BoardItemBase,
     BoardObjectBase,
     BoardObjectWithCoordinates,
     BoardObjectWithDimensions {
@@ -112,7 +112,8 @@ export interface StickyNoteBoardObject
 }
 
 export interface TextBoardObject
-  extends BoardItemBase,
+  extends
+    BoardItemBase,
     BoardObjectBase,
     BoardObjectWithCoordinates,
     BoardObjectWithDimensions {
@@ -130,7 +131,8 @@ export interface TextBoardObject
 }
 
 export interface ImageBoardObject
-  extends BoardItemBase,
+  extends
+    BoardItemBase,
     BoardObjectBase,
     BoardObjectWithDimensions,
     BoardObjectWithCoordinates {
@@ -159,9 +161,7 @@ interface TableStyle {
 }
 
 export interface TableBoardObject
-  extends BoardItemBase,
-    BoardObjectWithDimensions,
-    BoardObjectWithCoordinates {
+  extends BoardItemBase, BoardObjectWithDimensions, BoardObjectWithCoordinates {
   type: "image";
   rotation: number;
   cols?: number | { width: number }[];
@@ -176,7 +176,8 @@ export interface TableBoardObject
 }
 
 export interface StructDocBoardObject
-  extends BoardItemBase,
+  extends
+    BoardItemBase,
     BoardObjectBase,
     BoardObjectWithDimensions,
     BoardObjectWithCoordinates {
@@ -186,9 +187,7 @@ export interface StructDocBoardObject
 }
 
 export interface EmbedBoardObject
-  extends BoardItemBase,
-    BoardObjectBase,
-    BoardObjectWithCoordinates {
+  extends BoardItemBase, BoardObjectBase, BoardObjectWithCoordinates {
   type: "struct_doc";
   url: string;
   previewUrl: string;
@@ -198,7 +197,8 @@ export interface EmbedBoardObject
 }
 
 export interface ShapeBoardObject
-  extends BoardItemBase,
+  extends
+    BoardItemBase,
     BoardObjectBase,
     BoardObjectWithCoordinates,
     BoardObjectWithDimensions {
@@ -265,7 +265,8 @@ export interface TagBoardItem extends BoardItemBase {
 }
 
 export interface KanbanBoardObject
-  extends BoardItemBase,
+  extends
+    BoardItemBase,
     BoardObjectBase,
     BoardObjectWithCoordinates,
     BoardObjectWithDimensions {
@@ -273,7 +274,8 @@ export interface KanbanBoardObject
 }
 
 export interface UnsupportedBoardObject
-  extends BoardItemBase,
+  extends
+    BoardItemBase,
     BoardObjectBase,
     BoardObjectWithCoordinates,
     BoardObjectWithDimensions {
