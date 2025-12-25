@@ -5,6 +5,7 @@ import type { GetBoardsFilter } from "./miro-runtime.ts";
 interface InitialMiroBoardOptions {
   token?: string;
   boardId: string;
+  puppeteerOptions?: puppeteer.LaunchOptions;
 }
 
 type AdditionalFilter<T> = Partial<T> | Partial<{ [K in keyof T]: T[K][] }>;
@@ -22,7 +23,10 @@ export class MiroBoard {
   }
 
   private async initialize(options: InitialMiroBoardOptions) {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({
+      headless: true,
+      ...(options.puppeteerOptions ?? {})
+    });
     const page = await browser.newPage();
 
     if (options.token) {
