@@ -117,7 +117,7 @@ const svgOfFrame1 = await miroBoard.getSvg([framesWithTitleFrame1[0].id]);
 > [!WARNING]  
 > Remember to dispose the instance to make sure the browser is closed and the process
 > can exit. `await using` (as shown above) does this automatically, but is not supported
-> in all environments and may not be the optimal choise in every case. Alternatively,
+> in all environments and may not be the optimal choice in every case. Alternatively,
 > `miroBoard.dispose()` may be called at any time to dispose of the instance manually.
 
 Types for many of the common board object types has been provided in [miro-types.ts](src/miro-types.ts).
