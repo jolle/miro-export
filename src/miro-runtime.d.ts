@@ -21,6 +21,8 @@ declare global {
           export: {
             makeVector: () => Promise<string>;
           };
+          clearSelection: () => void;
+          isAllWidgetsLoaded: () => boolean;
         };
       };
     };

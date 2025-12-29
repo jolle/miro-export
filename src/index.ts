@@ -72,7 +72,7 @@ export class MiroBoard {
       await page.evaluate(
         (timeoutDuration) =>
           new Promise<void>((resolve, reject) => {
-            if (window.miro) {
+            if (window.cmd?.board?.api) {
               resolve();
             }
 
@@ -84,30 +84,23 @@ export class MiroBoard {
               );
             }, timeoutDuration);
 
-            const authModalChecker = setInterval(() => {
+            const interval = setInterval(() => {
               if (
                 document.querySelector('[data-testid="signup-popup-container"]')
               ) {
+                clearInterval(interval);
+                clearTimeout(timeout);
                 reject(
                   new Error(
                     `Miro board requires authentication. Check board access settings to allow anonymous access or supply a token.`
                   )
                 );
-              }
-            }, 250);
-
-            let miroValue: (typeof window)["miro"];
-            Object.defineProperty(window, "miro", {
-              get() {
-                return miroValue;
-              },
-              set(value) {
+              } else if (window.cmd?.board?.api) {
                 clearTimeout(timeout);
-                clearInterval(authModalChecker);
-                miroValue = value;
+                clearInterval(interval);
                 resolve();
               }
-            });
+            }, 250);
           }),
         options.boardLoadTimeoutMs ?? DEFAULT_BOARD_LOAD_TIMEOUT_MS
       );
@@ -141,10 +134,52 @@ export class MiroBoard {
     return this.context.promise.then(({ page }) => page);
   }
 
+  /**
+   * Checks that all widgets have been loaded. Times out to 5 seconds due to bug
+   * in Miro where certain boards fail to load all widgets if SDK is not required
+   * for this function call.
+   */
+  private async checkAllWidgetsLoaded(mustHaveSdk: boolean = false) {
+    await (
+      await this.page
+    ).evaluate(
+      (mustHaveSdk, timeoutDuration) =>
+        new Promise<void>((resolve, reject) => {
+          let startTime = Date.now();
+          const interval = setInterval(() => {
+            if (
+              window.cmd?.board?.api?.isAllWidgetsLoaded() &&
+              (!mustHaveSdk || window.miro)
+            ) {
+              clearInterval(interval);
+              resolve();
+            }
+
+            if (Date.now() - startTime >= timeoutDuration) {
+              clearInterval(interval);
+              if (mustHaveSdk) {
+                reject(
+                  new Error(
+                    `Miro SDK failed to load in ${timeoutDuration} ms. This is likely caused by a Miro-internal issue. Check that the board is accessible using an incognito browser window.`
+                  )
+                );
+              } else {
+                resolve();
+              }
+            }
+          }, 150);
+        }),
+      mustHaveSdk,
+      3_000
+    );
+  }
+
   async getBoardObjects<F extends GetBoardsFilter>(
     filter: F,
     additionalFilter?: AdditionalFilter<BoardObject>
   ): Promise<FilteredResultsByType<F["type"], BoardObject>> {
+    await this.checkAllWidgetsLoaded(true);
+
     return (await this.page).evaluate(
       async (filter, additionalFilter) => {
         // @ts-expect-error - https://github.com/evanw/esbuild/issues/2605#issuecomment-2050808084
@@ -188,8 +223,10 @@ export class MiroBoard {
   }
 
   async getSvg(objectsIds?: string[]) {
+    await this.checkAllWidgetsLoaded(objectsIds !== undefined);
+
     return (await this.page).evaluate(async (objectsIds) => {
-      await window.miro.board.deselect();
+      window.cmd.board.api.clearSelection();
 
       if (objectsIds) {
         for (const id of objectsIds) {

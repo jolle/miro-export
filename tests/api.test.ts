@@ -4,6 +4,7 @@ import { MiroBoard } from "../src";
 
 const boardId = process.env.TEST_BOARD_ID;
 const inaccessibleBoardId = process.env.PRIVATE_TEST_BOARD_ID;
+const buggyBoardId = process.env.BUGGY_TEST_BOARD_ID;
 
 if (!boardId) {
   console.error("TEST_BOARD_ID environment variable is required.");
@@ -12,6 +13,11 @@ if (!boardId) {
 
 if (!inaccessibleBoardId) {
   console.error("PRIVATE_TEST_BOARD_ID environment variable is required.");
+  process.exit(1);
+}
+
+if (!buggyBoardId) {
+  console.error("BUGGY_TEST_BOARD_ID environment variable is required.");
   process.exit(1);
 }
 
@@ -85,4 +91,19 @@ await it("should throw error for a non-public board", async () => {
       "Miro board requires authentication. Check board access settings to allow anonymous access or supply a token."
     );
   }
+});
+
+await it("should be able to export SVG of a buggy Miro board", async () => {
+  // this is a flaky issue on Miro; around 10% of the time the board loads fine
+  // so let's repeat this test a couple of times just to be sure
+  const results = await Promise.all(
+    Array.from({ length: 10 }).map(async () => {
+      const miroBoard = new MiroBoard({ boardId: buggyBoardId });
+      const svg = await miroBoard.getSvg();
+      const hasSvgContents = svg.includes("What should we do next?");
+      await miroBoard.dispose();
+      return hasSvgContents;
+    })
+  );
+  assert.deepStrictEqual(results, Array.from({ length: 10 }).fill(true));
 });
