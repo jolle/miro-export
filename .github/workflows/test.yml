@@ -22,3 +22,4 @@ jobs:
         env:
           TEST_BOARD_ID: ${{secrets.TEST_BOARD_ID}}
           PRIVATE_TEST_BOARD_ID: ${{secrets.PRIVATE_TEST_BOARD_ID}}
+          BUGGY_TEST_BOARD_ID: ${{secrets.BUGGY_TEST_BOARD_ID}}

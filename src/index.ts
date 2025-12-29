@@ -145,7 +145,7 @@ export class MiroBoard {
     ).evaluate(
       (mustHaveSdk, timeoutDuration) =>
         new Promise<void>((resolve, reject) => {
-          let startTime = Date.now();
+          const startTime = Date.now();
           const interval = setInterval(() => {
             if (
               window.cmd?.board?.api?.isAllWidgetsLoaded() &&
