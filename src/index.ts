@@ -234,7 +234,17 @@ export class MiroBoard {
         }
       }
 
-      return await window.cmd.board.api.export.makeVector();
+      let error: unknown;
+      for (let retry = 0; retry < 5; retry++) {
+        try {
+          return await window.cmd.board.api.export.makeVector();
+        } catch (e) {
+          error = e;
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+      }
+
+      throw error ?? Error("Failed to export vector");
     }, objectsIds);
   }
 }
