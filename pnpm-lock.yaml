@@ -7,10 +7,10 @@ settings:
 dependencies:
   '@commander-js/extra-typings':
     specifier: ^14.0.0
-    version: 14.0.0(commander@14.0.2)
+    version: 14.0.0(commander@14.0.3)
   commander:
     specifier: ^14.0.2
-    version: 14.0.2
+    version: 14.0.3
   puppeteer:
     specifier: ^24.34.0
     version: 24.34.0(typescript@5.9.3)
@@ -80,12 +80,12 @@ packages:
     engines: {node: '>=6.9.0'}
     dev: false
 
-  /@commander-js/extra-typings@14.0.0(commander@14.0.2):
+  /@commander-js/extra-typings@14.0.0(commander@14.0.3):
     resolution: {integrity: sha512-hIn0ncNaJRLkZrxBIp5AsW/eXEHNKYQBh0aPdoUqNgD+Io3NIykQqpKFyKcuasZhicGaEZJX/JBSIkZ4e5x8Dg==}
     peerDependencies:
       commander: ~14.0.0
     dependencies:
-      commander: 14.0.2
+      commander: 14.0.3
     dev: false
 
   /@esbuild/aix-ppc64@0.27.2:
@@ -902,8 +902,8 @@ packages:
     engines: {node: '>=18'}
     dev: true
 
-  /commander@14.0.2:
-    resolution: {integrity: sha512-TywoWNNRbhoD0BXs1P3ZEScW8W5iKrnbithIl0YH+uCmBd0QpPOA8yc82DS3BIE5Ma6FnBVUsJ7wVUDz4dvOWQ==}
+  /commander@14.0.3:
+    resolution: {integrity: sha512-H+y0Jo/T1RZ9qPP4Eh1pkcQcLRglraJaSLoyOtHxu6AapkjWVCy2Sit1QQ4x3Dng8qDlSsZEet7g5Pq06MvTgw==}
     engines: {node: '>=20'}
     dev: false
 
