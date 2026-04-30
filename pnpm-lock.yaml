@@ -42,7 +42,7 @@ devDependencies:
     version: 5.5.5(eslint-config-prettier@10.1.8)(eslint@9.39.2)(prettier@3.7.4)
   eslint-plugin-promise:
     specifier: ^7.2.1
-    version: 7.2.1(eslint@9.39.2)
+    version: 7.3.0(eslint@9.39.2)
   prettier:
     specifier: ^3.7.4
     version: 3.7.4
@@ -322,8 +322,8 @@ packages:
     dev: true
     optional: true
 
-  /@eslint-community/eslint-utils@4.4.1(eslint@9.39.2):
-    resolution: {integrity: sha512-s3O3waFUrMV8P/XaF/+ZTp1X9XBZW1a4B97ZnjQF2KYWaFD2A8KyFBsrsfSjEmjn3RGWAIuvlneuZm3CUK3jbA==}
+  /@eslint-community/eslint-utils@4.9.0(eslint@9.39.2):
+    resolution: {integrity: sha512-ayVFHdtZ+hsq1t2Dy24wCmGXGe4q9Gu3smhLYALJrr473ZH27MsnSL+LKUlimp4BWJqMDMLmPpx/Q9R3OAlL4g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
@@ -332,8 +332,8 @@ packages:
       eslint-visitor-keys: 3.4.3
     dev: true
 
-  /@eslint-community/eslint-utils@4.9.0(eslint@9.39.2):
-    resolution: {integrity: sha512-ayVFHdtZ+hsq1t2Dy24wCmGXGe4q9Gu3smhLYALJrr473ZH27MsnSL+LKUlimp4BWJqMDMLmPpx/Q9R3OAlL4g==}
+  /@eslint-community/eslint-utils@4.9.1(eslint@9.39.2):
+    resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
@@ -1083,13 +1083,13 @@ packages:
       synckit: 0.11.12
     dev: true
 
-  /eslint-plugin-promise@7.2.1(eslint@9.39.2):
-    resolution: {integrity: sha512-SWKjd+EuvWkYaS+uN2csvj0KoP43YTu7+phKQ5v+xw6+A0gutVX2yqCeCkC3uLCJFiPfR2dD8Es5L7yUsmvEaA==}
+  /eslint-plugin-promise@7.3.0(eslint@9.39.2):
+    resolution: {integrity: sha512-6uGiOR0INuujr6PEQmeSSP7GbIMJ/ebEXXiEzb/nOj68LknH5Pxzb/AbZivmr6VE6TkTE8rTjRK9zhKpK6HsRA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
-      eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
+      eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
     dependencies:
-      '@eslint-community/eslint-utils': 4.4.1(eslint@9.39.2)
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       eslint: 9.39.2
     dev: true
 
