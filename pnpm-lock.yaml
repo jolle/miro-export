@@ -13,7 +13,7 @@ dependencies:
     version: 14.0.3
   puppeteer:
     specifier: ^24.34.0
-    version: 24.42.0(typescript@5.9.3)
+    version: 24.43.0(typescript@5.9.3)
 
 devDependencies:
   '@eslint/eslintrc':
@@ -450,8 +450,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dev: true
 
-  /@puppeteer/browsers@2.13.0:
-    resolution: {integrity: sha512-46BZJYJjc/WwmKjsvDFykHtXrtomsCIrwYQPOP7VfMJoZY2bsDF9oROBABR3paDjDcmkUye1Pb1BqdcdiipaWA==}
+  /@puppeteer/browsers@2.13.1:
+    resolution: {integrity: sha512-zmS4RTK9fbrc++WlAJhxYbfz3IjDeOmkK/CwwbLmk7ydfS9e2CiEeRJHEPvjDVElO/bwXbidwGA37Bsm6LzCnQ==}
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
@@ -842,15 +842,15 @@ packages:
       bare-events: 2.8.2
       bare-path: 3.0.0
       bare-stream: 2.13.1(bare-events@2.8.2)
-      bare-url: 2.4.2
+      bare-url: 2.4.3
       fast-fifo: 1.3.2
     transitivePeerDependencies:
       - bare-abort-controller
       - react-native-b4a
     dev: false
 
-  /bare-os@3.9.0:
-    resolution: {integrity: sha512-JTjuZyNIDpw+GytMO4a6TK1VXdVKKJr6DRxEHasyuYyShV2deuiHJK/ahGZlebc+SG0/wJCB9XK8gprBGDFi/Q==}
+  /bare-os@3.9.1:
+    resolution: {integrity: sha512-6M5XjcnsygQNPMCMPXSK379xrJFiZ/AEMNBmFEmQW8d/789VQATvriyi5r0HYTL9TkQ26rn3kgdTG3aisbrXkQ==}
     engines: {bare: '>=1.14.0'}
     requiresBuild: true
     dev: false
@@ -859,7 +859,7 @@ packages:
     resolution: {integrity: sha512-tyfW2cQcB5NN8Saijrhqn0Zh7AnFNsnczRcuWODH0eYAXBsJ5gVxAUuNr7tsHSC6IZ77cA0SitzT+s47kot8Mw==}
     requiresBuild: true
     dependencies:
-      bare-os: 3.9.0
+      bare-os: 3.9.1
     dev: false
 
   /bare-stream@2.13.1(bare-events@2.8.2):
@@ -884,8 +884,8 @@ packages:
       - react-native-b4a
     dev: false
 
-  /bare-url@2.4.2:
-    resolution: {integrity: sha512-/9a2j4ac6ckpmAHvod/ob7x439OAHst/drc2Clnq+reRYd/ovddwcF4LfoxHyNk5AuGBnPg+HqFjmE/Zpq6v0A==}
+  /bare-url@2.4.3:
+    resolution: {integrity: sha512-Kccpc7ACfXaxfeInfqKcZtW4pT5YBn1mesc4sCsun6sRwtbJ4h+sNOaksUpYEJUKfN65YWC6Bw2OJEFiKxq8nQ==}
     requiresBuild: true
     dependencies:
       bare-path: 3.0.0
@@ -939,12 +939,12 @@ packages:
       supports-color: 7.2.0
     dev: true
 
-  /chromium-bidi@14.0.0(devtools-protocol@0.0.1595872):
+  /chromium-bidi@14.0.0(devtools-protocol@0.0.1608973):
     resolution: {integrity: sha512-9gYlLtS6tStdRWzrtXaTMnqcM4dudNegMXJxkR0I/CXObHalYeYcAMPrL19eroNZHtJ8DQmu1E+ZNOYu/IXMXw==}
     peerDependencies:
       devtools-protocol: '*'
     dependencies:
-      devtools-protocol: 0.0.1595872
+      devtools-protocol: 0.0.1608973
       mitt: 3.0.1
       zod: 3.25.76
     dev: false
@@ -1029,8 +1029,8 @@ packages:
       esprima: 4.0.1
     dev: false
 
-  /devtools-protocol@0.0.1595872:
-    resolution: {integrity: sha512-kRfgp8vWVjBu/fbYCiVFiOqsCk3CrMKEo3WbgGT2NXK2dG7vawWPBljixajVgGK9II8rDO9G0oD0zLt3I1daRg==}
+  /devtools-protocol@0.0.1608973:
+    resolution: {integrity: sha512-Tpm17fxYzt+J7VrGdc1k8YdRqS3YV7se/M6KeemEqvUbq/n7At1rWVuXMxQgpWkdwSdIEKYbU//Bve+Shm4YNQ==}
     dev: false
 
   /emoji-regex@8.0.0:
@@ -1480,8 +1480,8 @@ packages:
     engines: {node: '>=0.8.19'}
     dev: true
 
-  /ip-address@10.1.1:
-    resolution: {integrity: sha512-1FMu8/N15Ck1BL551Jf42NYIoin2unWjLQ2Fze/DXryJRl5twqtwNHlO39qERGbIOcKYWHdgRryhOC+NG4eaLw==}
+  /ip-address@10.2.0:
+    resolution: {integrity: sha512-/+S6j4E9AHvW9SWMSEY9Xfy66O5PWvVEJ08O0y5JGyEKQpojb0K0GKpz/v5HJ/G0vi3D2sjGK78119oXZeE0qA==}
     engines: {node: '>= 12'}
     dev: false
 
@@ -1575,8 +1575,8 @@ packages:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
 
-  /lru-cache@11.3.5:
-    resolution: {integrity: sha512-NxVFwLAnrd9i7KUBxC4DrUhmgjzOs+1Qm50D3oF1/oL+r1NpZ4gA7xvG0/zJ8evR7zIKn4vLf7qTNduWFtCrRw==}
+  /lru-cache@11.3.6:
+    resolution: {integrity: sha512-Gf/KoL3C/MlI7Bt0PGI9I+TeTC/I6r/csU58N4BSNc4lppLBeKsOdFYkK+dX0ABDUMJNfCHTyPpzwwO21Awd3A==}
     engines: {node: 20 || >=22}
     dev: true
 
@@ -1723,7 +1723,7 @@ packages:
     resolution: {integrity: sha512-3O/iVVsJAPsOnpwWIeD+d6z/7PmqApyQePUtCndjatj/9I5LylHvt5qluFaBT3I5h3r1ejfR056c+FCv+NnNXg==}
     engines: {node: 18 || 20 || >=22}
     dependencies:
-      lru-cache: 11.3.5
+      lru-cache: 11.3.6
       minipass: 7.1.3
     dev: true
 
@@ -1800,14 +1800,14 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /puppeteer-core@24.42.0:
-    resolution: {integrity: sha512-T4zXokk/izH01fYPhyyev1A4piWiOKrYq7CUFpdoYQxmOnXoV6YjUabmfIjCYkNspSoAXIxRid3Tw+Vg0fthYg==}
+  /puppeteer-core@24.43.0:
+    resolution: {integrity: sha512-cCRNXsUlhyPoKDz6+TiSpfZpRS3mD6Y1YFKhkdr6ik6TMfuJb7fAtXq9ThUFc4sphxObDk3BuAvdxc1Y6YOnqQ==}
     engines: {node: '>=18'}
     dependencies:
-      '@puppeteer/browsers': 2.13.0
-      chromium-bidi: 14.0.0(devtools-protocol@0.0.1595872)
+      '@puppeteer/browsers': 2.13.1
+      chromium-bidi: 14.0.0(devtools-protocol@0.0.1608973)
       debug: 4.4.3
-      devtools-protocol: 0.0.1595872
+      devtools-protocol: 0.0.1608973
       typed-query-selector: 2.12.2
       webdriver-bidi-protocol: 0.4.1
       ws: 8.20.0
@@ -1820,17 +1820,17 @@ packages:
       - utf-8-validate
     dev: false
 
-  /puppeteer@24.42.0(typescript@5.9.3):
-    resolution: {integrity: sha512-94MoPfFp2eY3eYIMdINkez4IOP5TMHntlZbVx06fHlQTtiQiYgaY0L2Zzfod8PVUkPqP7m3Qlre2v8YS8cudPA==}
+  /puppeteer@24.43.0(typescript@5.9.3):
+    resolution: {integrity: sha512-DRnMFz+J3s4lFUQcjqKl0/7h0jzlCZuUFU9lNjtKrnMl5WI1RwCaIItpHVu9empuPyUreYueN0sUW3/pnfdqsg==}
     engines: {node: '>=18'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@puppeteer/browsers': 2.13.0
-      chromium-bidi: 14.0.0(devtools-protocol@0.0.1595872)
+      '@puppeteer/browsers': 2.13.1
+      chromium-bidi: 14.0.0(devtools-protocol@0.0.1608973)
       cosmiconfig: 9.0.1(typescript@5.9.3)
-      devtools-protocol: 0.0.1595872
-      puppeteer-core: 24.42.0
+      devtools-protocol: 0.0.1608973
+      puppeteer-core: 24.43.0
       typed-query-selector: 2.12.2
     transitivePeerDependencies:
       - bare-abort-controller
@@ -1902,7 +1902,7 @@ packages:
     resolution: {integrity: sha512-NlGELfPrgX2f1TAAcz0WawlLn+0r3FyhhCRpFFK2CemXenPYvzMWWZINv3eDNo9ucdwme7oCHRY0Jnbs4aIkog==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
     dependencies:
-      ip-address: 10.1.1
+      ip-address: 10.2.0
       smart-buffer: 4.2.0
     dev: false
 
