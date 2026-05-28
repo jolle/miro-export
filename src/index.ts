@@ -53,12 +53,12 @@ export class MiroBoard {
       await browser.browserContexts()[0].setCookie({
         name: "token",
         value: options.token,
-        domain: "miro.com",
+        domain: ".miro.com",
         path: "/",
         expires: -1,
         sameParty: false,
-        httpOnly: false,
-        secure: false
+        httpOnly: true,
+        secure: true
       });
     }
 
