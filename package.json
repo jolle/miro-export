@@ -39,8 +39,8 @@
     "typescript-eslint": "^8.50.1"
   },
   "dependencies": {
-    "@commander-js/extra-typings": "^14.0.0",
-    "commander": "^14.0.2",
+    "@commander-js/extra-typings": "^15.0.0",
+    "commander": "^15.0.0",
     "puppeteer": "^24.34.0"
   },
   "scripts": {
