@@ -27,7 +27,7 @@ devDependencies:
     version: 4.4.1(eslint@9.39.2)(typescript@5.9.3)
   '@types/node':
     specifier: ^26.0.0
-    version: 26.1.1
+    version: 26.1.2
   ajv:
     specifier: ^8.17.1
     version: 8.20.0
@@ -496,8 +496,8 @@ packages:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
 
-  /@types/node@26.1.1:
-    resolution: {integrity: sha512-nxAkRSVkN1Y0JC1W8ky/fTfkGsMmcrRsbx+3XoZE+rMOX71kLYTV7fLXpqud1GpbpP5TuffXFqfX7fH2GgZREw==}
+  /@types/node@26.1.2:
+    resolution: {integrity: sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg==}
     dependencies:
       undici-types: 8.3.0
 
@@ -505,7 +505,7 @@ packages:
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
     requiresBuild: true
     dependencies:
-      '@types/node': 26.1.1
+      '@types/node': 26.1.2
     dev: false
     optional: true
 
