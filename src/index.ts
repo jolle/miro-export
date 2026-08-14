@@ -1,12 +1,28 @@
 import puppeteer, { Browser, Page, type LaunchOptions } from "puppeteer";
 import type { BoardObject } from "./miro-types.ts";
 import type { GetBoardsFilter } from "./miro-runtime.ts";
+import { resolveToken } from "./env.js";
+
+export { listBoards } from "./boards.js";
+export type { ListBoardsOptions, MiroBoardSummary } from "./boards.ts";
+export { toDrawio } from "./drawio.js";
+export type { ToDrawioOptions } from "./drawio.ts";
+export { backupBoards } from "./backup.js";
+export type {
+  BackupOptions,
+  BackupManifest,
+  BackupEntry,
+  BackupFormat,
+  BackupProgress
+} from "./backup.ts";
+export { loadEnvFile, resolveToken, MIRO_TOKEN_ENV_VAR } from "./env.js";
 
 interface InitialMiroBoardOptions {
   /**
    * The Miro authentication token with access to load the board.
    * Optional if anonymous users may access the board without
-   * logging in.
+   * logging in. Defaults to the `MIRO_TOKEN` environment variable,
+   * which may also be defined in a `.env` file.
    */
   token?: string;
   /**
@@ -23,9 +39,23 @@ interface InitialMiroBoardOptions {
    * is 15 seconds (15,000 milliseconds).
    */
   boardLoadTimeoutMs?: number;
+  /**
+   * Timeout for the Miro SDK to become available after the board
+   * itself has loaded, in milliseconds. Default is 30 seconds
+   * (30,000 milliseconds). The SDK is only required for operations
+   * that address individual board objects.
+   */
+  sdkLoadTimeoutMs?: number;
 }
 
 const DEFAULT_BOARD_LOAD_TIMEOUT_MS = 15_000;
+const DEFAULT_SDK_LOAD_TIMEOUT_MS = 30_000;
+
+/**
+ * How long to wait for all widgets to be reported as loaded when the
+ * SDK is not required. This wait is best-effort: it resolves either way.
+ */
+const WIDGET_LOAD_TIMEOUT_MS = 3_000;
 
 type AdditionalFilter<T> = Partial<T> | Partial<{ [K in keyof T]: T[K][] }>;
 
@@ -37,22 +67,27 @@ type FilteredResultsByType<
 export class MiroBoard {
   private context = Promise.withResolvers<{ browser: Browser; page: Page }>();
   private isDisposed = false;
+  private readonly sdkLoadTimeoutMs: number;
 
   constructor(options: InitialMiroBoardOptions) {
+    this.sdkLoadTimeoutMs =
+      options.sdkLoadTimeoutMs ?? DEFAULT_SDK_LOAD_TIMEOUT_MS;
     this.initialize(options);
   }
 
   private async initialize(options: InitialMiroBoardOptions) {
+    const token = resolveToken(options.token);
+
     const browser = await puppeteer.launch({
       headless: true,
       ...(options.puppeteerOptions ?? {})
     });
     const page = await browser.newPage();
 
-    if (options.token) {
+    if (token) {
       await browser.browserContexts()[0].setCookie({
         name: "token",
-        value: options.token,
+        value: token,
         domain: ".miro.com",
         path: "/",
         expires: -1,
@@ -135,9 +170,9 @@ export class MiroBoard {
   }
 
   /**
-   * Checks that all widgets have been loaded. Times out to 5 seconds due to bug
-   * in Miro where certain boards fail to load all widgets if SDK is not required
-   * for this function call.
+   * Checks that all widgets have been loaded. When the SDK is not required, this
+   * gives up quietly after a short wait, due to a bug in Miro where certain
+   * boards never report all widgets as loaded.
    */
   private async checkAllWidgetsLoaded(mustHaveSdk: boolean = false) {
     await (
@@ -170,7 +205,7 @@ export class MiroBoard {
           }, 150);
         }),
       mustHaveSdk,
-      3_000
+      mustHaveSdk ? this.sdkLoadTimeoutMs : WIDGET_LOAD_TIMEOUT_MS
     );
   }
 
@@ -223,7 +258,18 @@ export class MiroBoard {
   }
 
   async getSvg(objectsIds?: string[]) {
-    await this.checkAllWidgetsLoaded(objectsIds !== undefined);
+    if (objectsIds) {
+      await this.checkAllWidgetsLoaded(true);
+    } else {
+      // A whole-board export is measurably more detailed once the SDK and all
+      // widgets have loaded, but some boards never get there (Miro-internal
+      // bug), so fall back to a best-effort export rather than failing.
+      try {
+        await this.checkAllWidgetsLoaded(true);
+      } catch {
+        await this.checkAllWidgetsLoaded(false);
+      }
+    }
 
     return (await this.page).evaluate(async (objectsIds) => {
       window.cmd.board.api.clearSelection();
