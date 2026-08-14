@@ -1,6 +1,9 @@
 import { describe, it, after } from "node:test";
 import assert from "node:assert";
 import { MiroBoard } from "../src";
+import { loadEnvFile } from "../src/env.js";
+
+loadEnvFile();
 
 const boardId = process.env.TEST_BOARD_ID;
 const inaccessibleBoardId = process.env.PRIVATE_TEST_BOARD_ID;
