@@ -45,7 +45,7 @@
   },
   "scripts": {
     "lint": "eslint src/*.ts && prettier -c src/*.ts",
-    "build": "tsc && echo \"#!/usr/bin/env node\n$(cat ./build/cli.js)\" > ./build/cli.js",
+    "build": "tsc && node --input-type=module -e \"import{readFileSync,writeFileSync}from'node:fs';const p='./build/cli.js';const s=readFileSync(p,'utf8');if(!s.startsWith('#!'))writeFileSync(p,'#!/usr/bin/env node\\n'+s)\"",
     "test": "npm run test:unit && npm run test:live && npm run test:board-object-types && npm run test:api",
     "test:unit": "tsx tests/env.test.ts && tsx tests/boards.test.ts && tsx tests/drawio.test.ts && tsx tests/backup.test.ts",
     "test:live": "tsx tests/boards.live.test.ts",
