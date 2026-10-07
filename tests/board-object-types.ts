@@ -1,7 +1,10 @@
 import { resolve } from "path";
 import { MiroBoard } from "../src";
+import { loadEnvFile } from "../src/env.js";
 import * as tsj from "ts-json-schema-generator";
 import Ajv from "ajv";
+
+loadEnvFile();
 
 (async () => {
   const config = {
